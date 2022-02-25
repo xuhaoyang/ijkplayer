@@ -49,12 +49,13 @@ afterEvaluate { project ->
                 pom.artifactId = POM_ARTIFACT_ID
                 pom.version = VERSION_NAME
 
-                repository(url: getReleaseRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
-                snapshotRepository(url: getSnapshotRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
+                // repository(url: getReleaseRepositoryUrl()) {
+                //     authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                // }
+                // snapshotRepository(url: getSnapshotRepositoryUrl()) {
+                //     authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                // }
+                repository(url: uri('file:///Users/xuhaoyang/echat/repo/sdk/')) //定义本地maven仓库的地址
 
                 pom.project {
                     name POM_NAME
@@ -88,17 +89,17 @@ afterEvaluate { project ->
         }
     }
 
-    android.libraryVariants.all { variant ->
-        if(variant.buildType.name.equals("release")) {
-            def jarTask = project.tasks.create(name: "jar${variant.name.capitalize()}", type: Jar) {
-                from variant.javaCompile.destinationDir
-                exclude "**/R.class"
-                exclude "**/R\$**.class"
-                exclude "**/BuildConfig.class"
-            }
-            jarTask.dependsOn variant.javaCompile
-        }
-    }
+    // android.libraryVariants.all { variant ->
+    //     if(variant.buildType.name.equals("release")) {
+    //         def jarTask = project.tasks.create(name: "jar${variant.name.capitalize()}", type: Jar) {
+    //             from variant.javaCompile.destinationDir
+    //             exclude "**/R.class"
+    //             exclude "**/R\$**.class"
+    //             exclude "**/BuildConfig.class"
+    //         }
+    //         jarTask.dependsOn variant.javaCompile
+    //     }
+    // }
 
     signing {
         required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
@@ -121,9 +122,9 @@ afterEvaluate { project ->
         from android.sourceSets.main.java.sourceFiles
     }
 
-    artifacts {
-        archives androidSourcesJar
-        archives androidJavadocsJar
-        archives jarRelease
-    }
+//     artifacts {
+//         archives androidSourcesJar
+//         archives androidJavadocsJar
+//         archives jarRelease
+//     }
 }
